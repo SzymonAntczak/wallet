@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/api/users/sign_out", (req, res) => {
+router.post("/api/users/sign_out", (req, res) => {
   res.send("Hi there!");
 });
 
