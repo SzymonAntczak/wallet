@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
-    "test": "jest --watchAll --no-cache"
+    "test": "jest --watchAll --no-cache --detectOpenHandles"
   },
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
-      "./src/test/setup.ts"
+      "./src/test/setupFile.ts"
     ]
   },
   "keywords": [],
