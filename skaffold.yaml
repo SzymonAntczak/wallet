@@ -8,11 +8,19 @@ build:
   local:
     push: false
   artifacts:
-    - image: szymonantczak/wallet_auth
+    - image: santczak/wallet_auth
       context: auth
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: "src/**/*.ts"
+            dest: .
+    - image: santczak/wallet_client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.js"
             dest: .

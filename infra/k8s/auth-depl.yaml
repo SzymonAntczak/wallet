@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: szymonantczak/wallet_auth
+          image: santczak/wallet_auth
           env:
             - name: JWT_KEY
               valueFrom:
