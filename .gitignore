@@ -6,3 +6,6 @@ client/package-lock.json
 client/.next
 
 common
+
+wallets/node_modules
+wallets/package-lock.json
