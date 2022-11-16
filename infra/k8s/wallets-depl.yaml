@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wallets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wallets
+  template:
+    metadata: 
+      labels:
+        app: wallets
+    spec:
+      containers:
+        - name: wallets
+          image: santczak/wallet_wallets
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://wallets-mongo-srv:27017/wallets'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallets-srv
+spec:
+  selector:
+    app: wallets
+  ports:
+    - name: wallets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

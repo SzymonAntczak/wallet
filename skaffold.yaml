@@ -17,6 +17,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: santczak/wallet_wallets
+      context: wallets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: santczak/wallet_client
       context: client
       docker:

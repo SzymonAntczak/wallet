@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wallets-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wallets-mongo
+  template:
+    metadata:
+      labels:
+        app: wallets-mongo
+    spec:
+      containers:
+        - name: wallets-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallets-mongo-srv
+spec:
+  selector:
+    app: wallets-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
