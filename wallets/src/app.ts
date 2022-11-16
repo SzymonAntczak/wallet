@@ -2,7 +2,12 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
-import { errorHandler, NotFoundError } from '@sawallet/common';
+import { errorHandler, NotFoundError, currentUser } from '@sawallet/common';
+
+import { createWalletRouter } from './routes/create';
+import { readWalletRouter } from './routes/read';
+import { readWalletsRouter } from './routes/read-all';
+import { updateWalletRouter } from './routes/update';
 
 const app = express();
 
@@ -14,6 +19,12 @@ app.use(
     secure: process.env.NODE_ENV !== 'test',
   })
 );
+app.use(currentUser);
+
+app.use(createWalletRouter);
+app.use(readWalletRouter);
+app.use(readWalletsRouter);
+app.use(updateWalletRouter);
 
 app.all('*', async () => {
   throw new NotFoundError();
