@@ -7,7 +7,9 @@ import {
   requireAuth,
 } from '@sawallet/common';
 
+import { natsWrapper } from '../nats-wrapper';
 import { Wallet } from '../models/wallet';
+import { WalletUpdatedPublisher } from '../events/publishers/wallet-updated-publisher';
 
 const router = express.Router();
 
@@ -35,6 +37,12 @@ router.put(
 
     wallet.set({ name: req.body.name });
     await wallet.save();
+
+    new WalletUpdatedPublisher(natsWrapper.client).publish({
+      id: wallet.id,
+      name: wallet.name,
+      ownerId: wallet.ownerId,
+    });
 
     res.send(wallet);
   }
