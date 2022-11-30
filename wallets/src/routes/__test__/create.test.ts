@@ -1,7 +1,8 @@
 import request from 'supertest';
-import { app } from '../../app';
 
+import { app } from '../../app';
 import { Wallet } from '../../models/wallet';
+import { natsWrapper } from '../../nats-wrapper';
 
 describe('create', () => {
   it('has a route handler listening to /api/wallets for post request', async () => {
@@ -59,5 +60,17 @@ describe('create', () => {
 
     expect(wallets.length).toEqual(1);
     expect(wallets[0].name).toEqual(name);
+  });
+
+  it('publishes an event', async () => {
+    const name = 'test';
+
+    await request(app)
+      .post('/api/wallets')
+      .set('Cookie', global.signUp())
+      .send({ name })
+      .expect(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
