@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { app } from '../../app';
+import { natsWrapper } from '../../nats-wrapper';
 
 describe('update', () => {
   it('has a route handler listening to /api/wallets/:id for put request', async () => {
@@ -102,5 +103,23 @@ describe('update', () => {
       .expect(200);
 
     expect(readResponse.body.name).toEqual(updatedName);
+  });
+
+  it('publishes an event', async () => {
+    const cookie = global.signUp();
+
+    const createResponse = await request(app)
+      .post('/api/wallets')
+      .set('Cookie', cookie)
+      .send({ name: 'test 1' })
+      .expect(201);
+
+    await request(app)
+      .put(`/api/wallets/${createResponse.body.id}`)
+      .set('Cookie', cookie)
+      .send({ name: 'test 2' })
+      .expect(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
